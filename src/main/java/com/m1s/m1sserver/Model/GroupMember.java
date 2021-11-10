@@ -6,20 +6,22 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-public class Curriculum {
+public class GroupMember {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
     private Integer id;
 
-    @Getter @Setter
-    private String name;
-
     @ManyToOne
-    @JoinColumn(name = "interest_id")
+    @JoinColumn(name = "group_id")
     @Getter @Setter
-    private Interest interest;
+    private Group group;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    @Getter @Setter
+    private User user;
 
     @Getter @Setter
-    private Integer level;
+    private Integer authority;
 }
