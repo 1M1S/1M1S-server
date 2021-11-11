@@ -4,10 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-public class UserInterest {
+public class UserCurriculum {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
@@ -18,11 +17,8 @@ public class UserInterest {
     @Getter @Setter
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "interest_id")
+    @OneToMany
+    @JoinColumn(name = "curriculum_id")
     @Getter @Setter
-    private Interest interest;
-
-    @Getter @Setter
-    private Integer level;
+    private Curriculum curriculum;
 }
