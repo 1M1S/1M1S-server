@@ -16,5 +16,8 @@ public class Environment {
     private Integer id;
 
     @Getter @Setter
-    private Integer score_per_hour;
+    private String name;
+
+    @Getter @Setter
+    private String value;
 }
