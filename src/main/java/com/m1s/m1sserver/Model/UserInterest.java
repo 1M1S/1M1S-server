@@ -13,7 +13,7 @@ public class UserInterest {
     @Getter @Setter
     private Integer id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @Getter @Setter
     private User user;

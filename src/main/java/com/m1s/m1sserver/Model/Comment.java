@@ -21,7 +21,7 @@ public class Comment {
     @Getter @Setter
     private String content;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @Getter @Setter
     private User user;

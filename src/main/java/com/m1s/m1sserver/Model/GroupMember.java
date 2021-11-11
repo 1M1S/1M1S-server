@@ -17,7 +17,7 @@ public class GroupMember {
     @Getter @Setter
     private Group group;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @Getter @Setter
     private User user;
