@@ -5,13 +5,18 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
-public class Interest {
+public class CounselSurvey {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
     private Integer id;
 
-    @Getter @Setter
-    private String subject;
+    @Setter @Getter
+    private Integer problem_number;
+
+    @Setter @Getter
+    private String question;
+
+    @Setter @Getter
+    private String choices;
 }
