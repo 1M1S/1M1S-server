@@ -13,7 +13,7 @@ public class MemberInterest {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     @Getter @Setter
     private Member member;
 

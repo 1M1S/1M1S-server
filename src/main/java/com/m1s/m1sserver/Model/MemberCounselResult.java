@@ -14,7 +14,7 @@ public class MemberCounselResult {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     @Setter @Getter
     private Member member;
 

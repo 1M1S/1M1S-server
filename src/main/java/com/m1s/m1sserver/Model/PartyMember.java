@@ -18,7 +18,7 @@ public class PartyMember {
     private Party party;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     @Getter @Setter
     private Member member;
 
