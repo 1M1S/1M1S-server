@@ -11,7 +11,7 @@ public class MemberInformation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Integer id;
+    private long id;
 
     @OneToOne
     @JoinColumn(name = "member_id")

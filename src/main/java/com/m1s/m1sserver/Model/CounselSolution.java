@@ -13,7 +13,7 @@ public class CounselSolution {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Integer id;
+    private long id;
 
     @Setter @Getter
     private String result;

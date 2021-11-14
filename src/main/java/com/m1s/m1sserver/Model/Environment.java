@@ -13,7 +13,7 @@ public class Environment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Integer id;
+    private long id;
 
     @Getter @Setter
     private String name;

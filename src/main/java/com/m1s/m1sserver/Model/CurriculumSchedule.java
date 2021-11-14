@@ -10,7 +10,7 @@ public class CurriculumSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Integer id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "curriculum_id")

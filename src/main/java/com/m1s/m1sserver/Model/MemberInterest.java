@@ -10,7 +10,7 @@ public class MemberInterest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Integer id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "member_id")

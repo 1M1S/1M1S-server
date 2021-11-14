@@ -11,7 +11,7 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Integer id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "interest_id")
