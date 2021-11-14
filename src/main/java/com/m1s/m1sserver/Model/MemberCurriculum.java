@@ -17,7 +17,7 @@ public class MemberCurriculum {
     @Getter @Setter
     private Member member;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "curriculum_id")
     @Getter @Setter
     private Curriculum curriculum;
