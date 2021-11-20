@@ -1,11 +1,9 @@
 package com.m1s.m1sserver.api.user.comment;
 
-import com.m1s.m1sserver.api.post.Post;
 import com.m1s.m1sserver.api.post.PostRepository;
 import com.m1s.m1sserver.api.post.comment.Comment;
 import com.m1s.m1sserver.api.post.comment.CommentRepository;
-import com.m1s.m1sserver.api.user.Member;
-import com.m1s.m1sserver.api.user.MemberRepository;
+import com.m1s.m1sserver.auth.member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;

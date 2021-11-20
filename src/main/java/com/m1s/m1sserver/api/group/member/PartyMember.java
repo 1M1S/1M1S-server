@@ -1,7 +1,7 @@
 package com.m1s.m1sserver.api.group.member;
 
 import com.m1s.m1sserver.api.group.Party;
-import com.m1s.m1sserver.api.user.Member;
+import com.m1s.m1sserver.auth.member.Member;
 import lombok.Getter;
 import lombok.Setter;
 

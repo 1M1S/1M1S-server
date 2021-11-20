@@ -4,7 +4,7 @@ import com.m1s.m1sserver.api.group.Party;
 import com.m1s.m1sserver.api.group.PartyRepository;
 import com.m1s.m1sserver.api.group.member.PartyMember;
 import com.m1s.m1sserver.api.group.member.PartyMemberRepository;
-import com.m1s.m1sserver.api.user.MemberRepository;
+import com.m1s.m1sserver.auth.member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

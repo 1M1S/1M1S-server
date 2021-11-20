@@ -3,7 +3,7 @@ package com.m1s.m1sserver.api.user.schedule;
 import com.m1s.m1sserver.api.admin.enviroment.EnvironmentRepository;
 import com.m1s.m1sserver.api.ranking.Ranking;
 import com.m1s.m1sserver.api.ranking.RankingRepository;
-import com.m1s.m1sserver.api.user.MemberRepository;
+import com.m1s.m1sserver.auth.member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;

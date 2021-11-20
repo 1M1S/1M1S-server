@@ -1,7 +1,7 @@
 package com.m1s.m1sserver.api.user.counsel_result;
 
 import com.m1s.m1sserver.api.admin.counsel_solution.CounselSolutionRepository;
-import com.m1s.m1sserver.api.user.MemberRepository;
+import com.m1s.m1sserver.auth.member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;

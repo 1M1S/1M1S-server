@@ -1,6 +1,5 @@
-package com.m1s.m1sserver.JWT;
+package com.m1s.m1sserver.auth.JWT;
 
-import com.m1s.m1sserver.Interface.AuthenticationToken;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,5 +8,6 @@ import lombok.Getter;
 @Builder
 @Getter
 public class JwtAuthenticationToken implements AuthenticationToken {
-    private String token;
+    private String accessToken;
+    private String refreshToken;
 }

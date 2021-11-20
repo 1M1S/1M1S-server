@@ -1,6 +1,6 @@
 package com.m1s.m1sserver.api.post.comment;
 
-import com.m1s.m1sserver.api.user.Member;
+import com.m1s.m1sserver.auth.member.Member;
 import com.m1s.m1sserver.api.post.Post;
 import lombok.Getter;
 import lombok.Setter;

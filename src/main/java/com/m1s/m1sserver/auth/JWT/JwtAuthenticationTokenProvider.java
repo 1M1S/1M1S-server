@@ -1,11 +1,9 @@
-package com.m1s.m1sserver.JWT;
+package com.m1s.m1sserver.auth.JWT;
 
-import com.m1s.m1sserver.Interface.AuthenticationToken;
-import com.m1s.m1sserver.Interface.AuthenticationTokenProvider;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import org.dom4j.util.StringUtils;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashMap;
 
 @Component
 public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvider {
@@ -26,16 +25,30 @@ public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvid
     @Value("accessPrivateKey")
     private static String ACCESS_PRIVATE_KEY;
 
-    @Value("expirationMS")
-    private static long EXPIRATION_MS;
+
+    @Value("refreshPrivateKey")
+    private static String REFRESH_PRIVATE_KEY;
+
+
+    @Value("accessTokenExpirationMS")
+    @Getter
+    private static Long ACCESS_TOKEN_EXPIRATION_MS;
+
+
+    @Value("refreshTokenExpirationMS")
+    @Getter
+    private static Long REFRESH_TOKEN_EXPIRATION_MS;
+
 
     @Override
-    public String parseTokenString(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) return bearerToken.substring(7);
-        return null;
+    public HashMap<String, String> parseTokenString(HttpServletRequest request) {
+        if(request.getHeader("x-access-token") == null || request.getHeader("x-refresh-token") == null)return null;
+        HashMap<String, String> hm = new HashMap<>();
+        hm.put("x-access-token",request.getHeader("x-access-token"));
+        hm.put("x-refresh-token", request.getHeader("x-refresh-token"));
+        return hm;
     }
-    private String buildToken(Integer userId){
+    private String buildToken(Long userId, Long EXPIRATION_MS){
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expiredAt = now.plus(EXPIRATION_MS, ChronoUnit.MILLIS);
         return Jwts.builder()
@@ -49,24 +62,28 @@ public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvid
     private Key getSignKey(){
         return Keys.hmacShaKeyFor(ACCESS_PRIVATE_KEY.getBytes(StandardCharsets.UTF_8));
     }
+
     @Override
-    public AuthenticationToken issue(Integer user_id){
-        return JwtAuthenticationToken.builder().token(buildToken(user_id)).build();
+    public AuthenticationToken issue(Long user_id){
+        return JwtAuthenticationToken.builder()
+                .accessToken(buildToken(user_id,ACCESS_TOKEN_EXPIRATION_MS))
+                .refreshToken(buildToken(null, REFRESH_TOKEN_EXPIRATION_MS))
+                .build();
     };
 
     @Override
-    public Integer getTokenOwnerNo(String token){
+    public Long getTokenOwnerNo(String token){
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(ACCESS_PRIVATE_KEY).build()
                 .parseClaimsJws(token).getBody();
-        return Integer.parseInt(claims.getSubject());
+        return Long.parseLong(claims.getSubject());
     };
 
     @Override
-    public boolean validateToken(String token){
+    public boolean validateToken(String token, String PRIVATE_KEY){
         if(!token.isEmpty()){
             try{
-                Jwts.parserBuilder().setSigningKey(ACCESS_PRIVATE_KEY).build()
+                Jwts.parserBuilder().setSigningKey(PRIVATE_KEY).build()
                         .parseClaimsJws(token);
                 return true;
             }catch(SignatureException e){//헤더, 페이로드, 시그니쳐 중 시그니쳐가 해석 불가능할 때
@@ -74,6 +91,8 @@ public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvid
             }catch(MalformedJwtException e){//구조가 불량일 경우
                 logger.error("Invalud JWT token", e);
             }catch (ExpiredJwtException e){//만료된 토큰
+                Jwts.parserBuilder().setSigningKey(PRIVATE_KEY).build()
+                        .parseClaimsJws(token);
                 logger.error("Expired JWT token", e);
             }catch (UnsupportedJwtException e){
                 logger.error("Unsupported JWT Token", e);

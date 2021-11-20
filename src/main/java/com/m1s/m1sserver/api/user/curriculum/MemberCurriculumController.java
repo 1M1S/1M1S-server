@@ -1,13 +1,10 @@
 package com.m1s.m1sserver.api.user.curriculum;
 
-import com.m1s.m1sserver.api.admin.curriculum.Curriculum;
 import com.m1s.m1sserver.api.admin.curriculum.CurriculumRepository;
-import com.m1s.m1sserver.api.user.MemberRepository;
+import com.m1s.m1sserver.auth.member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.websocket.server.PathParam;
 
 @Controller
 @RequestMapping("/api/user/{user_id}/curriculum")
