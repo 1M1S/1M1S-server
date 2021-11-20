@@ -7,20 +7,30 @@ import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Builder
 @Entity
-public class RefreshToken {
+@IdClass(RefreshTokenId.class)
+public class RefreshToken implements Serializable {
+
     @Id
     @OneToOne
     @JoinColumn(name="member_id")
-    @NonNull
     @Getter @Setter
     private Member member;
 
     @Id
     @NonNull
     @Getter @Setter
+    private String refreshToken;
+
+}
+
+
+@Getter @Setter
+class RefreshTokenId implements Serializable{
+    private Member member;
     private String refreshToken;
 
 }

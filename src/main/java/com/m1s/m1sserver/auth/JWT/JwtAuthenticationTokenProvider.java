@@ -23,21 +23,21 @@ public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvid
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationTokenProvider.class);
 
     @Value("accessPrivateKey")
+    @Getter
     private static String ACCESS_PRIVATE_KEY;
 
 
     @Value("refreshPrivateKey")
-    private static String REFRESH_PRIVATE_KEY;
+    @Getter
+    public static String REFRESH_PRIVATE_KEY;
 
 
     @Value("accessTokenExpirationMS")
-    @Getter
-    private static Long ACCESS_TOKEN_EXPIRATION_MS;
+    public static Long ACCESS_TOKEN_EXPIRATION_MS;
 
 
     @Value("refreshTokenExpirationMS")
-    @Getter
-    private static Long REFRESH_TOKEN_EXPIRATION_MS;
+    public static Long REFRESH_TOKEN_EXPIRATION_MS;
 
 
     @Override
@@ -86,18 +86,8 @@ public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvid
                 Jwts.parserBuilder().setSigningKey(PRIVATE_KEY).build()
                         .parseClaimsJws(token);
                 return true;
-            }catch(SignatureException e){//헤더, 페이로드, 시그니쳐 중 시그니쳐가 해석 불가능할 때
-                logger.error("Invalid JWT signature", e);
-            }catch(MalformedJwtException e){//구조가 불량일 경우
-                logger.error("Invalud JWT token", e);
-            }catch (ExpiredJwtException e){//만료된 토큰
-                Jwts.parserBuilder().setSigningKey(PRIVATE_KEY).build()
-                        .parseClaimsJws(token);
-                logger.error("Expired JWT token", e);
-            }catch (UnsupportedJwtException e){
-                logger.error("Unsupported JWT Token", e);
-            }catch (IllegalArgumentException e){
-                logger.error("JWT claims string is empty", e);
+            }catch(Exception e){//헤더, 페이로드, 시그니쳐 중 시그니쳐가 해석 불가능할 때
+                return false;
             }
         }
         return false;

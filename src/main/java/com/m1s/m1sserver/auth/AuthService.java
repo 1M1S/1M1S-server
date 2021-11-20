@@ -31,12 +31,12 @@ public class AuthService {
 
     public String encodePassword(String password){return passwordEncoder.encode(password);}
 
-    public void join(MemberInformation memberInformation){
-        memberInformationService.insertMemberInformaion(memberInformation);
+    public MemberInformation join(MemberInformation memberInformation){
+        return memberInformationService.insertMemberInformaion(memberInformation);
     }
 
     public AuthenticationToken login(Member member){
-        if(!memberService.loginInformationCheck(member.getUsername(), member.getPassword()));
+        memberService.loginInformationCheck(member.getUsername(), member.getPassword());
         AuthenticationToken authenticationToken = jwtAuthenticationTokenProvider.issue(member.getId());
         refreshTokenService.insertRefreshToken(member, authenticationToken.getRefreshToken());
         return authenticationToken;
@@ -49,8 +49,8 @@ public class AuthService {
     public void checkPassword(Member user, String password){
         if(user.getPassword() != encodePassword(password));
     }
-    public void logout(Member member){
+    public boolean logout(Member member){
         refreshTokenService.deleteRefreshToken(member);
-        return;
+        return true;
     }
 }

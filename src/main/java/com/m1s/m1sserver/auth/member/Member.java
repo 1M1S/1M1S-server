@@ -12,7 +12,6 @@ public class Member {
     @Getter @Setter
     private Long id;
 
-    @Id
     @Getter @Setter
     private String username;
 
