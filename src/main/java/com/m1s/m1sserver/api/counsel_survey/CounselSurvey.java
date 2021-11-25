@@ -1,4 +1,4 @@
-package com.m1s.m1sserver.api.admin.counsel_survey;
+package com.m1s.m1sserver.api.counsel_survey;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,11 +10,10 @@ public class CounselSurvey {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Long id;
+    private long id;
 
-    @JoinColumn(name = "problem_number")
     @Setter @Getter
-    private Integer problemNumber;
+    private Integer problem_number;
 
     @Setter @Getter
     private String question;

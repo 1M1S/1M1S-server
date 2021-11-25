@@ -1,9 +1,15 @@
 package com.m1s.m1sserver.api.user.counsel_result;
 
-import com.m1s.m1sserver.api.admin.counsel_solution.CounselSolutionRepository;
-import com.m1s.m1sserver.auth.member.MemberRepository;
+import com.m1s.m1sserver.api.counsel_solution.CounselSolution;
+import com.m1s.m1sserver.api.counsel_solution.CounselSolutionRepository;
+import com.m1s.m1sserver.api.counsel_solution.CounselSolutionService;
+import com.m1s.m1sserver.auth.AuthService;
+import com.m1s.m1sserver.auth.member.Member;
+import com.m1s.m1sserver.auth.member.MemberService;
+import com.m1s.m1sserver.utils.CustomException;
+import com.m1s.m1sserver.utils.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -12,31 +18,33 @@ import java.time.LocalDateTime;
 @RequestMapping("api/user/{user_id}/counsel-result")
 public class MemberCounselResultController {
     @Autowired
-    MemberRepository memberRepository;
+    MemberService memberService;
+
     @Autowired
-    MemberCounselResultRepository memberCounselResultRepository;
+    MemberCounselResultService memberCounselResultService;
+
     @Autowired
-    CounselSolutionRepository counselSolutionRepository;
+    CounselSolutionService counselSolutionService;
+
+    @Autowired
+    AuthService authService;
 
     @PostMapping
-    public MemberCounselResult addMemberCounselResult(@PathVariable Long user_id, @RequestParam String result) {
-        MemberCounselResult m = new MemberCounselResult();
-        m.setMember(memberRepository.findById(user_id).get());
-        m.setCounselSolution(counselSolutionRepository.findByResult(result));
-        m.setCounselTime(LocalDateTime.now());
-        memberCounselResultRepository.save(m);
-        return m;
+    public MemberCounselResult addMemberCounselResult(Authentication authentication, @RequestParam String result) {
+        Member member = authService.getMe(authentication);
+        CounselSolution foundCounselSolution = counselSolutionService.getCounselSolution(result);
+        MemberCounselResult createdMemberCounselResult = memberCounselResultService.createMemberCounselResult(member, foundCounselSolution);
+        memberCounselResultService.save(createdMemberCounselResult);
+        return createdMemberCounselResult;
     }
 
     @GetMapping
-    public Iterable<MemberCounselResult> getMemberCounselResult(@PathVariable Long user_id) {
-        return memberCounselResultRepository.findAllByMemberId(user_id, Sort.by("counselTime"));
+    public Iterable<MemberCounselResult> getMemberCounselResults(@PathVariable Long user_id) {
+        return memberCounselResultService.getCounselResults(user_id);
     }
 
     @DeleteMapping("/{member_counsel_result_id}")
-    public MemberCounselResult delMemberCounselResult(@PathVariable Long user_id, @PathVariable Long member_counsel_result_id) {
-        MemberCounselResult m = memberCounselResultRepository.findById(member_counsel_result_id).get();
-        memberCounselResultRepository.deleteById(member_counsel_result_id);
-        return m;
+    public MemberCounselResult deleteMemberCounselResult(Authentication authentication, @PathVariable Long member_counsel_result_id) {
+        return memberCounselResultService.deleteMemberCounselResult(authentication, member_counsel_result_id);
     }
 }

@@ -1,4 +1,4 @@
-package com.m1s.m1sserver.api.admin.interest;
+package com.m1s.m1sserver.api.interest;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

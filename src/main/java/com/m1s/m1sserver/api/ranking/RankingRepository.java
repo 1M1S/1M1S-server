@@ -13,5 +13,7 @@ public interface RankingRepository extends JpaRepository<Ranking, Long> {
             ") AS r WHERE member_id = ?1", nativeQuery = true)
     Long getRank(Long user_id, Long interest_id);
 
+
+    boolean existsByMemberIdAndInterestId(Long user_id, Long interest_id);
     Ranking findByMemberIdAndInterestId(Long user_id, Long interest_id);
 }

@@ -14,9 +14,9 @@ public class RefreshTokenService {
     RefreshTokenRepository refreshTokenRepository;
 
     public void insertRefreshToken(Member member, String refreshToken){
-        RefreshToken refreshTokenRecord = RefreshToken.builder().member(member).refreshToken(refreshToken).build();
-            refreshTokenRepository.save(refreshTokenRecord);
-
+        //TODO 이부분 매핑에러 나는데 리프레시토큰관련부분은 알아서 나중에 구현
+//        RefreshToken refreshTokenRecord = RefreshToken.builder().member(member).refreshToken(refreshToken).build();
+//            refreshTokenRepository.save(refreshTokenRecord);
     }
 
     public void updateRefreshToken(Member member, String newRefreshToken){

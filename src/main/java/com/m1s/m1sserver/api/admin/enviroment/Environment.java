@@ -1,4 +1,4 @@
-package com.m1s.m1sserver.api.admin.enviroment;
+package com.m1s.m1sserver.Model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ public class Environment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Long id;
+    private long id;
 
     @Getter @Setter
     private String name;

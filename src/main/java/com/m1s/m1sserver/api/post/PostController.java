@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/post")
 public class PostController {
     @Autowired
-    private PostRepository postRepository;
+    private PostService postService;
 
     @GetMapping
     public Iterable<Post> getAllPost(@RequestParam(required = false) Long interest_id) {
-        if(interest_id == null) return postRepository.findAll(Sort.by("writingDate"));
-        else return postRepository.findAllByInterestId(interest_id, Sort.by(Sort.Direction.DESC, "writingDate"));
+        return postService.getPosts(interest_id);
     }
 
     @GetMapping("/{post_id}")
     public Post getPost(@PathVariable Long post_id) {
-        return postRepository.findById(post_id).get();
+
+        return postService.getPost(post_id);
     }
 }

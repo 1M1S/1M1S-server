@@ -1,6 +1,6 @@
 package com.m1s.m1sserver.api.user.schedule;
 
-import com.m1s.m1sserver.api.admin.interest.Interest;
+import com.m1s.m1sserver.api.interest.Interest;
 import com.m1s.m1sserver.auth.member.Member;
 import lombok.Getter;
 import lombok.Setter;

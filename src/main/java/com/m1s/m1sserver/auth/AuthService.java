@@ -1,14 +1,15 @@
 package com.m1s.m1sserver.auth;
 
 
+import com.m1s.m1sserver.api.user.information.MemberInformation;
+import com.m1s.m1sserver.api.user.information.MemberInformationService;
 import com.m1s.m1sserver.auth.JWT.AuthenticationToken;
 import com.m1s.m1sserver.auth.JWT.JwtAuthenticationTokenProvider;
 import com.m1s.m1sserver.auth.member.Member;
 import com.m1s.m1sserver.auth.member.MemberService;
-import com.m1s.m1sserver.api.user.information.MemberInformation;
-import com.m1s.m1sserver.api.user.information.MemberInformationService;
 import com.m1s.m1sserver.auth.refresh_token.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +35,15 @@ public class AuthService {
     public MemberInformation join(MemberInformation memberInformation){
         return memberInformationService.insertMemberInformaion(memberInformation);
     }
-
+    public Long getMyId(Authentication authentication){
+        return (Long) authentication.getPrincipal();
+    }
+    public Member getMe(Authentication authentication){
+        return memberService.findMember(getMyId(authentication));
+    }
     public AuthenticationToken login(Member member){
-        memberService.loginInformationCheck(member.getUsername(), member.getPassword());
+        //refcell22 - 이 로직에 의하면 사용자가 username이 아닌 id까지 알고있어야 로그인이 가능한건데.. 이 구현이 맞나?
+        Member foundMember = memberService.loginInformationCheck(member.getUsername(), member.getPassword());
         AuthenticationToken authenticationToken = jwtAuthenticationTokenProvider.issue(member.getId());
         refreshTokenService.insertRefreshToken(member, authenticationToken.getRefreshToken());
         return authenticationToken;

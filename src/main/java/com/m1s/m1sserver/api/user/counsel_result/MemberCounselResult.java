@@ -1,7 +1,8 @@
 package com.m1s.m1sserver.api.user.counsel_result;
 
-import com.m1s.m1sserver.api.admin.counsel_solution.CounselSolution;
+import com.m1s.m1sserver.api.counsel_solution.CounselSolution;
 import com.m1s.m1sserver.auth.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,11 +10,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 public class MemberCounselResult {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Long id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -23,9 +25,10 @@ public class MemberCounselResult {
     @ManyToOne
     @JoinColumn(name = "counsel_solution_id")
     @Getter @Setter
-    private CounselSolution counselSolution;
+    private CounselSolution counsel_solution;
 
-    @JoinColumn(name = "counsel_time")
     @Setter @Getter
-    private LocalDateTime counselTime;
+    private LocalDateTime counsel_time;
+
+    public Long getMemberId(){return member.getId();}
 }

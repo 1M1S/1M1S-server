@@ -1,6 +1,6 @@
-package com.m1s.m1sserver.api.admin.curriculum;
+package com.m1s.m1sserver.api.curriculum;
 
-import com.m1s.m1sserver.api.admin.interest.Interest;
+import com.m1s.m1sserver.api.interest.Interest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,7 @@ public class Curriculum {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Long id;
+    private long id;
 
     @Getter @Setter
     private String name;

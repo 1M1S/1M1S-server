@@ -1,12 +1,12 @@
 package com.m1s.m1sserver.auth.JWT;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,30 +22,28 @@ import java.util.HashMap;
 public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationTokenProvider.class);
 
-    @Value("accessPrivateKey")
     @Getter
-    private static String ACCESS_PRIVATE_KEY;
+    private static final String ACCESS_PRIVATE_KEY = "accessPrivateKeydkdoldoan;asdflkjaf";
 
 
-    @Value("refreshPrivateKey")
     @Getter
-    public static String REFRESH_PRIVATE_KEY;
+    public static final String REFRESH_PRIVATE_KEY = "refreshPrivateKeyasdfjlasfdjohyeonchang";
 
 
-    @Value("accessTokenExpirationMS")
-    public static Long ACCESS_TOKEN_EXPIRATION_MS;
+    public static final Long ACCESS_TOKEN_EXPIRATION_MS = 1000000L;
 
 
-    @Value("refreshTokenExpirationMS")
-    public static Long REFRESH_TOKEN_EXPIRATION_MS;
+    public static final Long REFRESH_TOKEN_EXPIRATION_MS = 1000000L;
 
 
     @Override
     public HashMap<String, String> parseTokenString(HttpServletRequest request) {
-        if(request.getHeader("x-access-token") == null || request.getHeader("x-refresh-token") == null)return null;
+        //TODO refcell 22- refreshtoken 관련부분은 알아서 구현. refreshtoken은 평소에 null이다가 갑자기 넘길때는 클라이언트의 갱신요청으로 인식하고 따로처리해야하는데 여기서 다 검사해버리면 안됨
+//        if(request.getHeader("x-access-token") == null || request.getHeader("x-refresh-token") == null)return null;
+        if(request.getHeader("x-access-token") == null)return null;
         HashMap<String, String> hm = new HashMap<>();
         hm.put("x-access-token",request.getHeader("x-access-token"));
-        hm.put("x-refresh-token", request.getHeader("x-refresh-token"));
+//        hm.put("x-refresh-token", request.getHeader("x-refresh-token"));
         return hm;
     }
     private String buildToken(Long userId, Long EXPIRATION_MS){
@@ -79,18 +77,22 @@ public class JwtAuthenticationTokenProvider implements AuthenticationTokenProvid
         return Long.parseLong(claims.getSubject());
     };
 
+
+    /**
+     * 토큰을 해석하면서 에러도 같이 검사하므로 궂이 validation을 따로 할 필요는 없음.
+     * 어차피 해석해서 SpringSecurity가 이해할수있는 Authentication으로 바꿔주어야함
+     * edited by refcell22
+     */
     @Override
-    public boolean validateToken(String token, String PRIVATE_KEY){
+    public Jws<Claims> parseToken(String token, String PRIVATE_KEY){
         if(!token.isEmpty()){
             try{
-                Jwts.parserBuilder().setSigningKey(PRIVATE_KEY).build()
+                return Jwts.parserBuilder().setSigningKey(PRIVATE_KEY).build()
                         .parseClaimsJws(token);
-                return true;
             }catch(Exception e){//헤더, 페이로드, 시그니쳐 중 시그니쳐가 해석 불가능할 때
-                return false;
+                return null;
             }
         }
-        return false;
-    };
-
+        return null;
+    }
 }

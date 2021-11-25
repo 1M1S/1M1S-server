@@ -1,6 +1,6 @@
 package com.m1s.m1sserver.api.group;
 
-import com.m1s.m1sserver.api.admin.interest.Interest;
+import com.m1s.m1sserver.api.interest.Interest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,7 @@ public class Party {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Long id;
+    private long id;
 
     @Getter @Setter
     private String name;
@@ -24,7 +24,6 @@ public class Party {
     @Getter @Setter
     private String goal;
 
-    @JoinColumn(name = "maximum_number_of_people")
     @Getter @Setter
     private Integer maximumNumberOfPeople;
 

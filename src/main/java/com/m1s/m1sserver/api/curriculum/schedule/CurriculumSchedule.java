@@ -1,7 +1,7 @@
-package com.m1s.m1sserver.api.admin.curriculum.schedule;
+package com.m1s.m1sserver.api.curriculum.schedule;
 
-import com.m1s.m1sserver.api.admin.curriculum.Curriculum;
-import com.m1s.m1sserver.api.admin.interest.Interest;
+import com.m1s.m1sserver.api.curriculum.Curriculum;
+import com.m1s.m1sserver.api.interest.Interest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ public class CurriculumSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    private Long id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "curriculum_id")
