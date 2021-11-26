@@ -26,6 +26,7 @@ public class Post {
     private String title;
 
     @Getter @Setter
+    @Column(length = 1000)
     private String content;
 
     @ManyToOne

@@ -13,6 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @RestController
 @RequestMapping("/api/user/schedule")
 public class MemberScheduleController {
@@ -34,9 +38,11 @@ public class MemberScheduleController {
     }
 
     @GetMapping
-    public Iterable<MemberSchedule> getMemberSchedule(Authentication authentication) {
-        Member me = authService.getMe(authentication);
-        return memberScheduleService.getMemberSchedules(me);
+
+    public Iterable<MemberSchedule> getMemberSchedule(@PathVariable Long user_id, @RequestParam String search_time) {
+        LocalDateTime t = LocalDate.parse(search_time, DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay();
+        return memberScheduleRepository.findAllByMemberIdAndStartTime(user_id, t.getYear(),
+                t.getMonthValue(), t.getDayOfMonth());
     }
 
     @PutMapping("/{member_schedule_id}")
