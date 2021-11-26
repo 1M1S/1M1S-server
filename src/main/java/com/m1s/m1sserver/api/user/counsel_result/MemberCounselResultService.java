@@ -21,13 +21,13 @@ public class MemberCounselResultService {
     @Autowired
     private AuthService authService;
 
-    public Iterable<MemberCounselResult> getCounselResults(Long member_id){
-        return memberCounselResultRepository.findAllByMemberIdOrderByCounselTime(member_id);
+    public Iterable<MemberCounselResult> getMemberCounselResults(Member member){
+        return memberCounselResultRepository.findAllByMemberIdOrderByCounselTime(member.getId());
     }
 
-    public MemberCounselResult getCounselResult(Long member_counsel_result_id){
-        if(!memberCounselResultRepository.existsById(member_counsel_result_id))throw new CustomException(ErrorCode.MEMBER_COUNSEL_RESULT_NOT_FOUND);
-        return memberCounselResultRepository.findById(member_counsel_result_id).get();
+    public MemberCounselResult getMemberCounselResult(Member member){
+        if(!memberCounselResultRepository.existsById(member.getId()))throw new CustomException(ErrorCode.MEMBER_COUNSEL_RESULT_NOT_FOUND);
+        return memberCounselResultRepository.findById(member.getId()).get();
     }
     public void save(MemberCounselResult memberCounselResult){
         try{
@@ -46,16 +46,19 @@ public class MemberCounselResultService {
                 .build();
     }
 
-    public Boolean checkOwner(Long user_id, MemberCounselResult memberCounselResult){
-        return user_id.equals(memberCounselResult.getMemberId());
-    }
-    public MemberCounselResult deleteMemberCounselResult(Authentication authentication,  Long member_counsel_result_id){
-        MemberCounselResult foundMemberCounselResult =
-                getCounselResult(member_counsel_result_id);
-        if(!checkOwner(authService.getMyId(authentication), foundMemberCounselResult))
+    public Boolean checkOwner(Member member, MemberCounselResult memberCounselResult){
+        if(member.getId() != memberCounselResult.getMemberId())
             throw new CustomException(ErrorCode.NO_AUTHENTICATION);
-        if(!memberCounselResultRepository.existsById(member_counsel_result_id))throw new CustomException(ErrorCode.MEMBER_COUNSEL_RESULT_NOT_FOUND);
-        memberCounselResultRepository.deleteById(member_counsel_result_id);
-        return foundMemberCounselResult;
+        return true;
+    }
+    public void deleteMemberCounselResult(Member member, MemberCounselResult memberCounselResult){
+        checkOwner(member,memberCounselResult );
+        if(!memberCounselResultRepository.existsById(memberCounselResult.getId()))throw new CustomException(ErrorCode.MEMBER_COUNSEL_RESULT_NOT_FOUND);
+        memberCounselResultRepository.deleteById(memberCounselResult.getId());
+
+    }
+
+    public void deleteMemberCounselResults(Member member){
+        memberCounselResultRepository.deleteAllByMemberId(member.getId());
     }
 }

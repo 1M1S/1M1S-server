@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberCurriculumRepository extends JpaRepository<MemberCurriculum, Long> {
     Iterable<MemberCurriculum> findAllByMemberId(Long user_id);
+    void deleteAllByMemberId(Long user_id);
 }

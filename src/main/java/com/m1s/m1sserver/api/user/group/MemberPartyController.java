@@ -51,6 +51,7 @@ public class MemberPartyController {
 
     @GetMapping("/{group_id}")
     public Party getParty(@PathVariable Long group_id) {
+
         return partyService.getParty(group_id);
     }
 

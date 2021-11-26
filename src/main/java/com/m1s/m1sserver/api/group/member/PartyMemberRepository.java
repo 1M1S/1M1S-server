@@ -7,4 +7,5 @@ public interface PartyMemberRepository extends JpaRepository<PartyMember, Long> 
     Boolean existsByMemberIdAndPartyId(Long user_id, Long group_id);
     Iterable<PartyMember> findAllByPartyId(Long group_id);
     void deleteAllByPartyId(Long group_id);
+    void deleteAllByMemberId(Long user_id);
 }

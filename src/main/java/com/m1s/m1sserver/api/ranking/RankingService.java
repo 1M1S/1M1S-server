@@ -31,6 +31,17 @@ public class RankingService {
         return rankingRepository.findByMemberIdAndInterestId(member.getId(), interest.getId());
     }
 
+    public Ranking createRanking(Member member, Interest interest){
+        return save(Ranking.builder()
+                .member(member)
+                .interest(interest)
+                .score(0)
+                .build());
+    }
+
+    public Ranking save(Ranking ranking){
+        return rankingRepository.save(ranking);
+    }
     public void editScore(Ranking ranking, MemberSchedule memberSchedule){
         final String score_per_minute = environmentService.getEnvironment("score_per_minute").getValue();
         int score = ranking.getScore() + memberSchedule.calculateScore(score_per_minute);
@@ -41,5 +52,8 @@ public class RankingService {
         final String score_per_minute = environmentService.getEnvironment("score_per_minute").getValue();
         int score = ranking.getScore() + memberSchedule.calculateScore(score_per_minute);
         ranking.setScore(score);
+    }
+    public void deleteRankings(Member member){
+        rankingRepository.deleteAllByMemberId(member.getId());
     }
 }

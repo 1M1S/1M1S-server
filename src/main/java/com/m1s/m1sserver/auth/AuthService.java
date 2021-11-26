@@ -1,8 +1,14 @@
 package com.m1s.m1sserver.auth;
 
 
+import com.m1s.m1sserver.api.group.member.PartyMemberService;
+import com.m1s.m1sserver.api.ranking.RankingService;
+import com.m1s.m1sserver.api.user.counsel_result.MemberCounselResultService;
+import com.m1s.m1sserver.api.user.curriculum.MemberCurriculumService;
 import com.m1s.m1sserver.api.user.information.MemberInformation;
 import com.m1s.m1sserver.api.user.information.MemberInformationService;
+import com.m1s.m1sserver.api.user.interest.MemberInterestService;
+import com.m1s.m1sserver.api.user.schedule.MemberScheduleService;
 import com.m1s.m1sserver.auth.JWT.AuthenticationToken;
 import com.m1s.m1sserver.auth.JWT.JwtAuthenticationTokenProvider;
 import com.m1s.m1sserver.auth.member.Member;
@@ -26,6 +32,24 @@ public class AuthService {
 
     @Autowired
     JwtAuthenticationTokenProvider jwtAuthenticationTokenProvider;
+
+    @Autowired
+    private RankingService rankingService;
+
+    @Autowired
+    private MemberInterestService memberInterestService;
+
+    @Autowired
+    private MemberScheduleService memberScheduleService;
+
+    @Autowired
+    private MemberCurriculumService memberCurriculumService;
+
+    @Autowired
+    private PartyMemberService partyMemberService;
+
+    @Autowired
+    private MemberCounselResultService memberCounselResultService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -59,5 +83,15 @@ public class AuthService {
     public boolean logout(Member member){
         refreshTokenService.deleteRefreshToken(member);
         return true;
+    }
+
+    public void deleteAccount(Member member){
+        rankingService.deleteRankings(member);
+        memberInterestService.deleteMemberInterests(member);
+        memberScheduleService.deleteMemberSchedules(member);
+        memberCurriculumService.deleteMemberCurriculums(member);
+        partyMemberService.deletePartyMembers(member);
+        memberCounselResultService.deleteMemberCounselResults(member);
+        memberService.deleteMember(member);
     }
 }

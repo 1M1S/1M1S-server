@@ -2,6 +2,8 @@ package com.m1s.m1sserver.api.user.interest;
 
 
 import com.m1s.m1sserver.api.interest.Interest;
+import com.m1s.m1sserver.api.ranking.Ranking;
+import com.m1s.m1sserver.api.ranking.RankingService;
 import com.m1s.m1sserver.auth.member.Member;
 import com.m1s.m1sserver.utils.CustomException;
 import com.m1s.m1sserver.utils.ErrorCode;
@@ -13,7 +15,16 @@ public class MemberInterestService {
     @Autowired
     private MemberInterestRepository memberInterestRepository;
 
+    @Autowired
+    private RankingService rankingService;
     public MemberInterest createMemberInterest(Member member, Interest interest, Integer level){
+        Ranking ranking;
+        try {
+            ranking = rankingService.getRanking(member, interest);
+        }catch (CustomException e){
+            ranking = rankingService.createRanking(member,interest);
+        }
+
         return save(MemberInterest.builder()
                 .member(member)
                 .interest(interest)
@@ -49,6 +60,10 @@ public class MemberInterestService {
     }
     public MemberInterest save(MemberInterest memberInterest){
         return memberInterestRepository.save(memberInterest);
+    }
+
+    public void deleteMemberInterests(Member member){
+        memberInterestRepository.deleteAllByMemberId(member.getId());
     }
 
 }

@@ -1,5 +1,15 @@
 package com.m1s.m1sserver.auth.member;
 
+import com.m1s.m1sserver.api.group.member.PartyMemberService;
+import com.m1s.m1sserver.api.ranking.Ranking;
+import com.m1s.m1sserver.api.ranking.RankingService;
+import com.m1s.m1sserver.api.register_survey.RegisterSurveyService;
+import com.m1s.m1sserver.api.user.counsel_result.MemberCounselResultService;
+import com.m1s.m1sserver.api.user.curriculum.MemberCurriculumService;
+import com.m1s.m1sserver.api.user.information.MemberInformationService;
+import com.m1s.m1sserver.api.user.interest.MemberInterestService;
+import com.m1s.m1sserver.api.user.schedule.MemberSchedule;
+import com.m1s.m1sserver.api.user.schedule.MemberScheduleService;
 import com.m1s.m1sserver.auth.AuthService;
 import com.m1s.m1sserver.utils.CustomException;
 import com.m1s.m1sserver.utils.ErrorCode;
@@ -19,6 +29,8 @@ public class MemberService {
     private AuthService authService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+
 
 
     public Member getMember(Long memberId){
@@ -53,5 +65,8 @@ public class MemberService {
         member.setPassword(authService.encodePassword(member.getPassword()));
         memberRepository.save(member);
     }
+    public void deleteMember(Member member){
+        memberRepository.deleteById(member.getId());
 
+    }
 }

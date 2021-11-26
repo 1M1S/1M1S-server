@@ -49,6 +49,9 @@ public class PartyMemberService {
         partyMemberRepository.deleteById(party_member_id);
     }
 
+    public void deletePartyMembers(Member member){
+        partyMemberRepository.deleteAllByMemberId(member.getId());
+    }
     public PartyMember save(PartyMember partyMember){
         return partyMemberRepository.save(partyMember);
     }

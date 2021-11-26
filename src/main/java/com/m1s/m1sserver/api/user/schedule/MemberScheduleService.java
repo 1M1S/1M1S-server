@@ -74,6 +74,10 @@ public class MemberScheduleService {
         if(memberSchedule.getFinish())rankingService.deleteScore(targetRanking, memberSchedule);
     }
 
+    public void deleteMemberSchedules(Member member){
+        memberScheduleRepository.deleteAllByMemberId(member.getId());
+    }
+
     public MemberSchedule save(MemberSchedule memberSchedule){
         return memberScheduleRepository.save(memberSchedule);
     }

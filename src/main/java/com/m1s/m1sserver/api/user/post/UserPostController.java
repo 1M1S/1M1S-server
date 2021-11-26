@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user/{user_id}/post")
+@RequestMapping("/api/user/post")
 public class UserPostController {
     @Autowired
     private PostService postService;

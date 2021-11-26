@@ -14,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user/{user_id}/schedule")
+@RequestMapping("/api/user/schedule")
 public class MemberScheduleController {
     @Autowired
     private MemberScheduleService memberScheduleService;

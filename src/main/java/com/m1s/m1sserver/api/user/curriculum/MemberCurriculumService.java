@@ -49,6 +49,9 @@ public class MemberCurriculumService {
         return foundMemberCurriculum;
     }
 
+    public void deleteMemberCurriculums(Member member){
+        memberCurriculumRepository.deleteAllByMemberId(member.getId());
+    }
     public MemberCurriculum save(MemberCurriculum memberCurriculum){
         return memberCurriculumRepository.save(memberCurriculum);
     }

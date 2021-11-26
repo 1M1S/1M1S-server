@@ -58,4 +58,9 @@ public class MemberInformationService {
         if(!memberInformationRepository.existsByMemberId(member.getId()))throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         return memberInformationRepository.findByMemberId(member.getId());
     }
+
+    public void deleteMemberInformation(Member member){
+        MemberInformation targetMemberInformation = getMemberInfo(member);
+        memberInformationRepository.deleteById(targetMemberInformation.getId());
+    }
 }

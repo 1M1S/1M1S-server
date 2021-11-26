@@ -1,6 +1,7 @@
 package com.m1s.m1sserver.api.register_survey;
 
 
+import com.m1s.m1sserver.auth.member.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

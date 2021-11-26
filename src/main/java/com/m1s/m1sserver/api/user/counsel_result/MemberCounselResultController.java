@@ -39,12 +39,16 @@ public class MemberCounselResultController {
     }
 
     @GetMapping
-    public Iterable<MemberCounselResult> getMemberCounselResults(@PathVariable Long user_id) {
-        return memberCounselResultService.getCounselResults(user_id);
+    public Iterable<MemberCounselResult> getMemberCounselResults(Authentication authentication) {
+        Member me = authService.getMe(authentication);
+        return memberCounselResultService.getMemberCounselResults(me);
     }
 
     @DeleteMapping("/{member_counsel_result_id}")
     public MemberCounselResult deleteMemberCounselResult(Authentication authentication, @PathVariable Long member_counsel_result_id) {
-        return memberCounselResultService.deleteMemberCounselResult(authentication, member_counsel_result_id);
+        Member me = authService.getMe(authentication);
+        MemberCounselResult targetMemberCounselResult = memberCounselResultService.getMemberCounselResult(me);
+        memberCounselResultService.deleteMemberCounselResult(me, targetMemberCounselResult);
+        return targetMemberCounselResult;
     }
 }

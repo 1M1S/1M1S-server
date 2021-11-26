@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/api/user/{user_id}/interest")
+@RequestMapping("/api/user/interest")
 public class MemberInterestController {
     @Autowired
     private MemberInterestService memberInterestService;
