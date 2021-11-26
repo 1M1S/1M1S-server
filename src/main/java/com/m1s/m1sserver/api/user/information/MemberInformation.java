@@ -36,4 +36,6 @@ public class MemberInformation {
 
     @Getter @Setter
     private LocalDateTime register_date;
+
+    public Long getMemberId(){return member.getId();}
 }

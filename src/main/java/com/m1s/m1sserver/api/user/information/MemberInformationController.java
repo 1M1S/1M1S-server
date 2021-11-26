@@ -1,37 +1,36 @@
 package com.m1s.m1sserver.api.user.information;
 
+import com.m1s.m1sserver.api.user.schedule.MemberSchedule;
+import com.m1s.m1sserver.auth.AuthService;
+import com.m1s.m1sserver.auth.member.Member;
+import com.m1s.m1sserver.auth.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/api/user/{user_id}/information")
+@RequestMapping("/api/user/information")
 public class MemberInformationController {
     @Autowired
-    private MemberInformationRepository memberInformationRepository;
+    private MemberInformationService memberInformationService;
+
+    @Autowired
+    private MemberService memberService;
+
+    @Autowired
+    private AuthService authService;
 
     @GetMapping
-    public @ResponseBody MemberInformation getMemberInformation(@PathVariable Long user_id) {
-        return memberInformationRepository.findByMemberId(user_id);
+    public @ResponseBody MemberInformation getMemberInformation(Authentication authentication) {
+        Member me = authService.getMe(authentication);
+        return memberInformationService.getMemberInfo(me);
     }
 
     @PutMapping
-    public @ResponseBody MemberInformation editMemberInformation(@PathVariable Long user_id, @RequestBody MemberInformation m) {
-        MemberInformation edited = memberInformationRepository.findByMemberId(user_id);
-
-        String name = m.getName();
-        String nickname = m.getNickname();
-        String gender = m.getGender();
-        String phone = m.getPhone();
-        String email = m.getEmail();
-
-        if(name != null) edited.setName(name);
-        if(nickname != null) edited.setNickname(nickname);
-        if(gender != null) edited.setGender(gender);
-        if(phone != null) edited.setPhone(phone);
-        if(email != null) edited.setEmail(email);
-
-        memberInformationRepository.save(edited);
-        return edited;
+    public @ResponseBody MemberInformation editMemberInformation(Authentication authentication, @RequestBody MemberInformation newMemberInformation) {
+        Member me = authService.getMe(authentication);
+        MemberInformation targetMemberInformation = memberInformationService.getMemberInfo(me);
+        return memberInformationService.editMemberInformation(me, targetMemberInformation, newMemberInformation);
     }
 }

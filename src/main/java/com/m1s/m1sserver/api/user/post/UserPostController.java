@@ -2,11 +2,15 @@ package com.m1s.m1sserver.api.user.post;
 
 import com.m1s.m1sserver.api.post.Post;
 import com.m1s.m1sserver.api.post.PostRepository;
+import com.m1s.m1sserver.api.post.PostService;
+import com.m1s.m1sserver.auth.AuthService;
+import com.m1s.m1sserver.auth.member.Member;
 import com.m1s.m1sserver.auth.member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -16,54 +20,43 @@ import java.util.Optional;
 @RequestMapping("/api/user/{user_id}/post")
 public class UserPostController {
     @Autowired
-    private PostRepository postRepository;
+    private PostService postService;
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private AuthService authService;
+
     @PostMapping
-    public Post addPost(@PathVariable Long user_id, @RequestBody Post p) {
-        p.setMember(memberRepository.findById(user_id).get());
-        p.setWritingDate(LocalDateTime.now());
-        postRepository.save(p);
-        return p;
+    public Post addPost(Authentication authentication, @RequestBody Post post){
+        Member me = authService.getMe(authentication);
+        return postService.createPost(me, post);
     }
 
     @GetMapping
-    public Iterable<Post> getPost(@PathVariable Long user_id) {
-        return postRepository.findByMemberId(user_id, Sort.by(Sort.Direction.DESC, "writingDate"));
+    public Iterable<Post> getPosts(Authentication authentication) {
+        Member me = authService.getMe(authentication);
+        return postService.getPosts(me);
     }
 
     @GetMapping("/{post_id}")
-    public Boolean checkPost(@PathVariable Long user_id, @PathVariable Long post_id) {
-        Post p = postRepository.findById(post_id).get();
-        return p.getMember().getId().equals(user_id);
+    public Boolean checkPost(Authentication authentication, @PathVariable Long post_id) {
+        Member me = authService.getMe(authentication);
+        Post targetPost = postService.getPost(post_id);
+        return postService.checkOwner(me, targetPost);
     }
 
     @PutMapping("/{post_id}")
-    public ResponseEntity<Post> editPost(@PathVariable Long user_id, @PathVariable Long post_id, @RequestBody Post p) {
-        Optional<Post> o = postRepository.findById(post_id);
-        // 일정이 없는 경우 예외처리
-        if(o.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Post edit = o.get();
-        // 작성자가 유저와 일치하지 않는 경우 예외처리
-        if(!edit.getMember().getId().equals(user_id)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-        if(p.getInterest() != null) edit.setInterest(p.getInterest());
-        if(p.getTitle() != null) edit.setTitle(p.getTitle());
-        if(p.getContent() != null) edit.setContent(p.getContent());
-
-        postRepository.save(edit);
-        return new ResponseEntity<>(edit, HttpStatus.OK);
+    public Post editPost(Authentication authentication, @PathVariable Long post_id, @RequestBody Post newPost) {
+        Member member = authService.getMe(authentication);
+        Post oldPost = postService.getPost(post_id);
+        return postService.editPost(member, oldPost, newPost);
     }
 
     @DeleteMapping("/{post_id}")
-    public ResponseEntity<Post> delPost(@PathVariable Long user_id, @PathVariable Long post_id) {
-        Optional<Post> o = postRepository.findById(post_id);
-        // 일정이 없는 경우 예외처리
-        if(o.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Post p = o.get();
-        if(!p.getMember().getId().equals(user_id)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        postRepository.deleteById(post_id);
-        return new ResponseEntity<>(p, HttpStatus.OK);
+    public Post deletePost(Authentication authentication, @PathVariable Long post_id) {
+        Member me = authService.getMe(authentication);
+        Post targetPost = postService.getPost(post_id);
+        return targetPost;
     }
 }

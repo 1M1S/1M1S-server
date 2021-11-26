@@ -31,8 +31,7 @@ public class MemberPartyController {
     public Party addParty(Authentication authentication, @RequestBody Party party) {
         Member me = authService.getMe(authentication);
         party = partyService.addParty(party);
-        PartyMember createdPartyMember = partyMemberService.createPartyMember(me, party, "그룹장");
-        partyMemberService.save(createdPartyMember);
+        partyMemberService.createPartyMember(me, party, "그룹장");
         return party;
     }
 
@@ -46,9 +45,7 @@ public class MemberPartyController {
     public Party requestParty(Authentication authentication, @PathVariable Long group_id) {
         Party targetParty = partyService.getParty(group_id);
         Member me = authService.getMe(authentication);
-        PartyMember createdPartyMember =
-                partyMemberService.createPartyMember(me, targetParty, "승인대기");
-        partyMemberService.save(createdPartyMember);
+        partyMemberService.createPartyMember(me, targetParty, "승인대기");
         return targetParty;
     }
 
@@ -61,10 +58,8 @@ public class MemberPartyController {
     public Party editParty(Authentication authentication, @PathVariable Long group_id, @RequestBody Party inputParty) {
         Long myId = authService.getMyId(authentication);
         PartyMember me = partyMemberService.getPartyMember(myId, group_id);
-        if(!me.getAuthority().equals("그룹장")) throw new CustomException(ErrorCode.NO_AUTHENTICATION);
         Party targetParty = partyService.getParty(group_id);
-        targetParty = partyService.editParty(targetParty, inputParty);
-        targetParty = partyService.save(targetParty);
+        targetParty = partyService.editParty(me, targetParty, inputParty);
         return targetParty;
     }
 
@@ -73,20 +68,17 @@ public class MemberPartyController {
         Long myId = authService.getMyId(authentication);
         PartyMember me = partyMemberService.getPartyMember(myId, group_id);
         Party targetParty = partyService.getParty(group_id);
-        if(!me.getAuthority().equals("그룹장")) {
-            Iterable<PartyMember> PM = partyMemberRepository.findAllByPartyId(group_id);
-            for(PartyMember Pm : PM) partyMemberRepository.deleteById(Pm.getId());
-            partyRepository.deleteById(group_id);
-        }
-        else {
-
-        }
-        return p;
+        partyService.deleteParty(me, targetParty);
+        return targetParty;
     }
 
 
     @DeleteMapping("/{group_id}/leave")
     public Party leaveParty(Authentication authentication, @PathVariable Long group_id){
-
+        Long myId = authService.getMyId(authentication);
+        PartyMember me = partyMemberService.getPartyMember(myId, group_id);
+        Party targetParty = partyService.getParty(group_id);
+        partyMemberService.deletePartyMember(me);
+        return targetParty;
     }
 }

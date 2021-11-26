@@ -1,4 +1,4 @@
-package com.m1s.m1sserver.Model;
+package com.m1s.m1sserver.api.admin.enviroment;
 
 import lombok.Getter;
 import lombok.Setter;

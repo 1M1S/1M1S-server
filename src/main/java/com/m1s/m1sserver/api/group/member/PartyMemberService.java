@@ -14,17 +14,39 @@ public class PartyMemberService {
     private PartyMemberRepository partyMemberRepository;
 
     public PartyMember createPartyMember(Member member, Party party, String authority){
-        return PartyMember.builder()
+        return save(PartyMember.builder()
                 .party(party)
                 .member(member)
                 .authority(authority)
-                .build();
+                .build());
     }
 
     public PartyMember getPartyMember(Long user_id, Long group_id){
         if(!partyMemberRepository.existsByMemberIdAndPartyId(user_id, group_id))
             throw new CustomException(ErrorCode.PARTICIPANT_NOT_FOUND);
         return partyMemberRepository.findByMemberIdAndPartyId(user_id, group_id);
+    }
+
+    public Iterable<PartyMember> getPartyMembers(Long group_id){
+        return partyMemberRepository.findAllByPartyId(group_id);
+    }
+
+    public void deletePartyMembers(Party party){
+        partyMemberRepository.deleteAllByPartyId(party.getId());
+    }
+
+    public void deletePartyMembers(Long group_id){
+        partyMemberRepository.deleteAllByPartyId(group_id);
+    }
+
+    public void deletePartyMember(PartyMember partyMember){
+        if(partyMember.getAuthority().equals("그룹장"))throw new CustomException(ErrorCode.LEADER_CANT_LEAVE);
+        deletePartyMember(partyMember.getId());
+    }
+
+    public void deletePartyMember(Long party_member_id){
+        if(!partyMemberRepository.existsById(party_member_id))throw new CustomException(ErrorCode.PARTICIPANT_NOT_FOUND);
+        partyMemberRepository.deleteById(party_member_id);
     }
 
     public PartyMember save(PartyMember partyMember){

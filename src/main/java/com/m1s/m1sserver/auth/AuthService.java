@@ -33,13 +33,13 @@ public class AuthService {
     public String encodePassword(String password){return passwordEncoder.encode(password);}
 
     public MemberInformation join(MemberInformation memberInformation){
-        return memberInformationService.insertMemberInformaion(memberInformation);
+        return memberInformationService.insertMemberInformation(memberInformation);
     }
     public Long getMyId(Authentication authentication){
         return (Long) authentication.getPrincipal();
     }
     public Member getMe(Authentication authentication){
-        return memberService.findMember(getMyId(authentication));
+        return memberService.getMember(getMyId(authentication));
     }
     public AuthenticationToken login(Member member){
         //refcell22 - 이 로직에 의하면 사용자가 username이 아닌 id까지 알고있어야 로그인이 가능한건데.. 이 구현이 맞나?

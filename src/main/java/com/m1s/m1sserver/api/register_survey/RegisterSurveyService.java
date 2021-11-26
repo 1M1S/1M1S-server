@@ -11,7 +11,7 @@ public class RegisterSurveyService {
     @Autowired
     private RegisterSurveyRepository registerSurveyRepository;
 
-    public Iterable<RegisterSurvey> getRegisterSurvey(Long interest_id) {
+    public Iterable<RegisterSurvey> getRegisterSurveys(Long interest_id) {
         return registerSurveyRepository.findAllByInterestId(interest_id, Sort.by("problemNumber"));
     }
 

@@ -1,6 +1,10 @@
 package com.m1s.m1sserver.api.ranking;
 
 
+import com.m1s.m1sserver.api.admin.enviroment.EnvironmentService;
+import com.m1s.m1sserver.api.interest.Interest;
+import com.m1s.m1sserver.api.user.schedule.MemberSchedule;
+import com.m1s.m1sserver.auth.member.Member;
 import com.m1s.m1sserver.utils.CustomException;
 import com.m1s.m1sserver.utils.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +18,28 @@ public class RankingService {
     @Autowired
     private RankingRepository rankingRepository;
 
-    public Long getRank(Long user_id, Long interest_id) {
-        if(!rankingRepository.existsByMemberIdAndInterestId(user_id, interest_id))throw new CustomException(ErrorCode.RANK_NOT_FOUND);
-        return rankingRepository.getRank(user_id, interest_id);
+    @Autowired
+    private EnvironmentService environmentService;
+
+    public Long getRankNum(Member member, Interest interest) {
+        if(!rankingRepository.existsByMemberIdAndInterestId(member.getId(), interest.getId()))throw new CustomException(ErrorCode.RANK_NOT_FOUND);
+        return rankingRepository.getRank(member.getId(), interest.getId());
     }
 
+    public Ranking getRanking(Member member, Interest interest){
+        if(!rankingRepository.existsByMemberIdAndInterestId(member.getId(), interest.getId()))throw new CustomException(ErrorCode.RANK_NOT_FOUND);
+        return rankingRepository.findByMemberIdAndInterestId(member.getId(), interest.getId());
+    }
+
+    public void editScore(Ranking ranking, MemberSchedule memberSchedule){
+        final String score_per_minute = environmentService.getEnvironment("score_per_minute").getValue();
+        int score = ranking.getScore() + memberSchedule.calculateScore(score_per_minute);
+        ranking.setScore(score);
+    }
+
+    public void deleteScore(Ranking ranking, MemberSchedule memberSchedule){
+        final String score_per_minute = environmentService.getEnvironment("score_per_minute").getValue();
+        int score = ranking.getScore() + memberSchedule.calculateScore(score_per_minute);
+        ranking.setScore(score);
+    }
 }

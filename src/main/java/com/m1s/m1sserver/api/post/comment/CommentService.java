@@ -35,13 +35,19 @@ public class CommentService {
         if(!commentRepository.existsById(comment_id))throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
         return commentRepository.findById(comment_id).get();
     }
-    public void editComment(Comment oldComment, Comment newComment){
-
+    public Comment editComment(Member member, Comment oldComment, Comment newComment){
+        checkOwner(member, oldComment);
         if (newComment.getContent() != null) oldComment.setContent(newComment.getContent());
-        commentRepository.save(oldComment);
+        return commentRepository.save(oldComment);
     }
-    public Boolean checkOwnerOfComment(Long user_id, Comment comment){
-        return user_id.equals(comment.getMemberId());
+    public boolean checkOwner(Member member, Comment comment){
+        if(member.getId() != comment.getMemberId())throw new CustomException(ErrorCode.NO_AUTHENTICATION);
+        return true;
+    }
+
+    public void deleteComment(Member member, Comment comment){
+        checkOwner(member, comment);
+        deleteComment(comment.getId());
     }
 
     public void deleteComment(Long comment_id){
@@ -49,12 +55,12 @@ public class CommentService {
     }
 
     public Comment createComment(Member member, Post post, Comment comment){
-        return Comment.builder()
+        return save(Comment.builder()
                 .member(member)
                 .post(post)
                 .content(comment.getContent())
                 .writing_date(LocalDateTime.now())
-                .build();
+                .build());
     }
 
     public Comment save(Comment comment){

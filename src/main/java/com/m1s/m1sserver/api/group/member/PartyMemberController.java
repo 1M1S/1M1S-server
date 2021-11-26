@@ -1,4 +1,4 @@
-package com.m1s.m1sserver.api.user.group;
+package com.m1s.m1sserver.api.group.member;
 
 import com.m1s.m1sserver.api.group.member.PartyMember;
 import com.m1s.m1sserver.api.group.member.PartyMemberRepository;
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user/{user_id}/group/{group_id}/member")
+@RequestMapping("/api/user/group/{group_id}/member")
 public class PartyMemberController {
     @Autowired
     PartyMemberRepository partyMemberRepository;

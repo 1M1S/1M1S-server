@@ -21,10 +21,9 @@ public class MemberService {
     private PasswordEncoder passwordEncoder;
 
 
-    public Member findMember(Long memberId){
-        Optional<Member> result = memberRepository.findById(memberId);
-        if(!result.isPresent())throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        return result.get();
+    public Member getMember(Long memberId){
+        if(!memberRepository.existsById(memberId))throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        return memberRepository.findById(memberId).get();
     }
 
 

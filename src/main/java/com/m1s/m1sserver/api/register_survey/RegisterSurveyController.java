@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/register-survey")
 public class RegisterSurveyController {
     @Autowired
-    private RegisterSurveyRepository registerSurveyRepository;
+    private RegisterSurveyService registerSurveyService;
 
     @GetMapping
     public Iterable<RegisterSurvey> getRegisterSurvey(@RequestParam Long interest_id) {
-        return registerSurveyRepository.findAllByInterestId(interest_id, Sort.by("problemNumber"));
+        return registerSurveyService.getRegisterSurveys(interest_id);
     }
 }

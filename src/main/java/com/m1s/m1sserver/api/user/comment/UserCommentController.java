@@ -41,8 +41,7 @@ public class UserCommentController {
     public Comment addComment(Authentication authentication, @RequestParam Long post_id, @RequestBody Comment comment) {
         Member foundMember = authService.getMe(authentication);
         Post foundPost = postService.getPost(post_id);
-        Comment newComment = commentService.createComment(foundMember, foundPost, comment);
-        return commentService.save(newComment);
+        return commentService.createComment(foundMember, foundPost, comment);
     }
 
     @GetMapping
@@ -52,28 +51,24 @@ public class UserCommentController {
 
     @GetMapping("/{comment_id}")
     public Boolean checkComment(Authentication authentication, @PathVariable Long comment_id) {
-        Long user_id = (Long)authentication.getPrincipal();
+        Member me = authService.getMe(authentication);
         Comment foundComment = commentService.getComment(comment_id);
-        return commentService.checkOwnerOfComment(user_id, foundComment);
+        return commentService.checkOwner(me, foundComment);
     }
 
     @PutMapping("/{comment_id}")
     public ResponseEntity<Comment> editComment(Authentication authentication, @PathVariable Long comment_id, @RequestBody Comment newComment) {
+        Member me = authService.getMe(authentication);
         Comment oldComment = commentService.getComment(comment_id);
-        if (!commentService.checkOwnerOfComment
-                (authService.getMyId(authentication), oldComment))
-            throw new CustomException(ErrorCode.NO_AUTHENTICATION);
-        commentService.editComment(oldComment, newComment);
+        commentService.editComment(me, oldComment, newComment);
         return new ResponseEntity<>(oldComment, HttpStatus.OK);
     }
 
     @DeleteMapping("/{comment_id}")
     public ResponseEntity<Comment> deleteComment(Authentication authentication, @PathVariable Long comment_id) {
+        Member me = authService.getMe(authentication);
         Comment targetComment = commentService.getComment(comment_id);
-        if (!commentService.checkOwnerOfComment
-                (authService.getMyId(authentication), targetComment))
-            throw new CustomException(ErrorCode.NO_AUTHENTICATION);
-        commentService.deleteComment(comment_id);
+        commentService.deleteComment(me, targetComment);
         return new ResponseEntity<>(targetComment, HttpStatus.OK);
     }
 }

@@ -28,4 +28,6 @@ public class PartyMember {
 
     @Getter @Setter
     private String authority;
+
+    public Long getPartyId(){return party.getId();}
 }

@@ -2,6 +2,7 @@ package com.m1s.m1sserver.api.post;
 
 import com.m1s.m1sserver.api.interest.Interest;
 import com.m1s.m1sserver.auth.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,4 +35,6 @@ public class Post {
 
     @Getter @Setter
     private LocalDateTime writing_date;
+
+    public Long getMemberId(){return member.getId();}
 }
