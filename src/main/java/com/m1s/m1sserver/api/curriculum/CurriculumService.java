@@ -12,13 +12,13 @@ public class CurriculumService {
     @Autowired
     private CurriculumRepository curriculumRepository;
 
-    public Iterable<Curriculum> getCurriculums(Long interest_id, Integer level){
+    public Iterable<Curriculum> getCurriculums(Long interest_id, String level){
         if(interest_id == null)return getCurriculums(level);
         if(level == null)return getCurriculums(interest_id);
         return curriculumRepository.findAllByInterestIdAndLevel(interest_id, level);
     }
 
-    public Iterable<Curriculum> getCurriculums(Integer level){
+    public Iterable<Curriculum> getCurriculums(String level){
         if(level == null)return curriculumRepository.findAll();
         return curriculumRepository.findAllByLevel(level);
     }

@@ -46,8 +46,8 @@ public class MemberScheduleController {
     @PutMapping("/{member_schedule_id}")
     public MemberSchedule editMemberSchedule(Authentication authentication, @PathVariable Long member_schedule_id, @RequestBody MemberSchedule newMemberSchedule) {
         Member me = authService.getMe(authentication);
-        MemberSchedule oldMemberSchedule = memberScheduleService.getMemberSchedule(member_schedule_id);
-        return memberScheduleService.editMemberSchedule(me, oldMemberSchedule, newMemberSchedule);
+        MemberSchedule memberSchedule = memberScheduleService.getMemberSchedule(member_schedule_id);
+        return memberScheduleService.editMemberSchedule(me, memberSchedule, newMemberSchedule);
     }
 
     @DeleteMapping("/{member_schedule_id}")

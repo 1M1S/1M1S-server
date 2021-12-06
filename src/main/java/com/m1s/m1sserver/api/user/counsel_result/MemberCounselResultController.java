@@ -46,7 +46,7 @@ public class MemberCounselResultController {
     @DeleteMapping("/{member_counsel_result_id}")
     public MemberCounselResult deleteMemberCounselResult(Authentication authentication, @PathVariable Long member_counsel_result_id) {
         Member me = authService.getMe(authentication);
-        MemberCounselResult targetMemberCounselResult = memberCounselResultService.getMemberCounselResult(me);
+        MemberCounselResult targetMemberCounselResult = memberCounselResultService.getMemberCounselResult(member_counsel_result_id);
         memberCounselResultService.deleteMemberCounselResult(me, targetMemberCounselResult);
         return targetMemberCounselResult;
     }

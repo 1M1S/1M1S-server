@@ -46,4 +46,13 @@ public class MemberSchedule {
         return Integer.parseInt(Long.toString(ChronoUnit.MINUTES.between(startTime, endTime))) * Integer.parseInt(score_per_minute);
     }
 
+    public MemberSchedule(MemberSchedule memberSchedule) {
+        this.member = memberSchedule.getMember();
+        this.content = memberSchedule.getContent();
+        this.startTime = memberSchedule.getStartTime();
+        this.endTime = memberSchedule.getEndTime();
+        this.finish = memberSchedule.getFinish();
+        this.interest = memberSchedule.getInterest();
+    }
+
 }

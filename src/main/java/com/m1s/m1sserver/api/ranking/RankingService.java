@@ -46,7 +46,9 @@ public class RankingService {
     public Ranking save(Ranking ranking){
         return rankingRepository.save(ranking);
     }
-    public void editScore(Ranking ranking, MemberSchedule memberSchedule){
+
+    // 점수를 추가하는 기능이므로 함수명으로 editScore보다 addScore가 더 적절해보인다.
+    public void addScore(Ranking ranking, MemberSchedule memberSchedule){
         final String score_per_minute = environmentService.getEnvironment("score_per_minute").getValue();
         int score = ranking.getScore() + memberSchedule.calculateScore(score_per_minute);
         ranking.setScore(score);
@@ -54,9 +56,10 @@ public class RankingService {
 
     public void deleteScore(Ranking ranking, MemberSchedule memberSchedule){
         final String score_per_minute = environmentService.getEnvironment("score_per_minute").getValue();
-        int score = ranking.getScore() + memberSchedule.calculateScore(score_per_minute);
+        int score = ranking.getScore() - memberSchedule.calculateScore(score_per_minute);
         ranking.setScore(score);
     }
+
     public void deleteRankings(Member member){
         rankingRepository.deleteAllByMemberId(member.getId());
     }

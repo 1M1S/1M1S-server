@@ -13,7 +13,7 @@ public class CounselSurvey {
     private long id;
 
     @Setter @Getter
-    private Integer problem_number;
+    private Integer problemNumber;
 
     @Setter @Getter
     private String question;

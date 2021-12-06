@@ -23,13 +23,19 @@ public class MemberCounselResultService {
     private AuthService authService;
 
     public Iterable<MemberCounselResult> getMemberCounselResults(Member member){
-        return memberCounselResultRepository.findAllByMember(member, Sort.by(Sort.Direction.DESC, "counselTIme"));
+        return memberCounselResultRepository.findAllByMember(member, Sort.by(Sort.Direction.DESC, "counselTime"));
     }
 
     public MemberCounselResult getMemberCounselResult(Member member){
         if(!memberCounselResultRepository.existsById(member.getId()))throw new CustomException(ErrorCode.MEMBER_COUNSEL_RESULT_NOT_FOUND);
         return memberCounselResultRepository.findByMember(member);
     }
+
+    public MemberCounselResult getMemberCounselResult(Long member_counsel_result_id){
+        if(!memberCounselResultRepository.existsById(member_counsel_result_id))throw new CustomException(ErrorCode.MEMBER_COUNSEL_RESULT_NOT_FOUND);
+        return memberCounselResultRepository.findById(member_counsel_result_id).get();
+    }
+
     public void save(MemberCounselResult memberCounselResult){
         try{
             memberCounselResultRepository.save(memberCounselResult);

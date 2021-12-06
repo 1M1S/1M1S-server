@@ -2,9 +2,11 @@ package com.m1s.m1sserver.api.ranking;
 
 import com.m1s.m1sserver.api.interest.Interest;
 import com.m1s.m1sserver.api.interest.InterestService;
+import com.m1s.m1sserver.auth.AuthService;
 import com.m1s.m1sserver.auth.member.Member;
 import com.m1s.m1sserver.auth.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,11 +21,14 @@ public class RankingController {
     @Autowired
     private InterestService interestService;
 
+    @Autowired
+    private AuthService authService;
+
     @GetMapping
-    public Long getRankNum(@RequestParam Long user_id, @RequestParam Long interest_id) {
-        Member member = memberService.getMember(user_id);
+    public Long getRankNum(Authentication authentication, @RequestParam Long interest_id) {
+        Member me = authService.getMe(authentication);
         Interest interest = interestService.getInterest(interest_id);
-        return rankingService.getRankNum(member, interest);
+        return rankingService.getRankNum(me, interest);
     }
 
     @GetMapping("/top3")

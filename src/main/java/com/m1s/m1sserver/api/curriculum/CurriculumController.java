@@ -16,7 +16,7 @@ public class CurriculumController {
     private CurriculumService curriculumService;
 
     @GetMapping
-    public Iterable<Curriculum> getCurriculums(@RequestParam(required = false) Long interest_id, @RequestParam(required = false) Integer level) {
+    public Iterable<Curriculum> getCurriculums(@RequestParam(required = false) Long interest_id, @RequestParam(required = false) String level) {
         return curriculumService.getCurriculums(interest_id, level);
 
         /*if(interest_id != null) {
